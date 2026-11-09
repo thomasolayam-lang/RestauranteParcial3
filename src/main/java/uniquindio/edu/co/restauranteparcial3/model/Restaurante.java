@@ -10,7 +10,7 @@ public class Restaurante {
     private String nit;
     private String direccion;
 
-//listas
+    //listas
     private List<Producto> menu;
     private List<Cliente> listaClientes;
     private List<Pedido> historialPedidos;
@@ -21,10 +21,10 @@ public class Restaurante {
         this.nit = nit;
         this.direccion = direccion;
 
-        this.menu= new ArrayList<>();
-        this.listaClientes= new ArrayList<>();
-        this.historialPedidos= new ArrayList<>();
-        this.serviciosDomicilio= new ArrayList<>();
+        this.menu = new ArrayList<>();
+        this.listaClientes = new ArrayList<>();
+        this.historialPedidos = new ArrayList<>();
+        this.serviciosDomicilio = new ArrayList<>();
     }
 
 
@@ -79,5 +79,12 @@ public class Restaurante {
                 ", lista de Clientes:" + listaClientes +
                 ", historial de Pedidos:" + historialPedidos +
                 ", servicios a Domicilio:" + serviciosDomicilio;
+    }
+
+    //metodos
+
+
+    public static boolean registrarProducto(producto: Producto){
+        return true;
     }
 }
