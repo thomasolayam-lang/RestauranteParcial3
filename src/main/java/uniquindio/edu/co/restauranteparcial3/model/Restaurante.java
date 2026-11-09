@@ -1,10 +1,5 @@
 package uniquindio.edu.co.restauranteparcial3.model;
 
-import uniquindio.edu.co.restauranteparcial3.model.Cliente;
-import uniquindio.edu.co.restauranteparcial3.model.Pedido;
-import uniquindio.edu.co.restauranteparcial3.model.Producto;
-import uniquindio.edu.co.restauranteparcial3.model.ServicioDomicilio;
-
 import java.util.ArrayList;
 import java.util.List;
 

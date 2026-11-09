@@ -87,7 +87,7 @@ public class Pedido {
         return domicilioAceptado;
     }
 
-    // MÉTODOS
+    // MÉTODOS DE NEGOCIO
 
     // Agrega un producto a la lista de detalles del pedido
     public boolean agregarDetalle(Producto producto, int cantidad) {
@@ -151,20 +151,20 @@ public class Pedido {
 
     // Cancela el pedido siempre que no haya sido entregado aún
     public boolean cancelar() {
-        if (estado != EstadoPedido.ENTREGADO) {
+        if (estado != EstadoPedido.CANCELADO && estado != EstadoPedido.ENTREGADO) {
             this.estado = EstadoPedido.CANCELADO;
             return true;
         }
         return false;
     }
 
-    // Calcula la suma de todos los productos incluidos
-    public double calcularTotalProductos() {
-        double total = 0.0;
+    // Suma del valor neto de todos los productos (excluyendo domicilio)
+    public double calcularSubtotalProductos() {
+        double subtotal = 0.0;
         for (DetallePedido d : detalles) {
-            total += d.calcularSubtotal();
+            subtotal += d.calcularSubtotal();
         }
-        return total;
+        return subtotal;
     }
 
     // Calcula el costo del flete/domicilio si aplica
@@ -177,6 +177,6 @@ public class Pedido {
 
     // Suma del consumo de comida/bebida + domicilio
     public double calcularTotal() {
-        return calcularTotalProductos() + calcularCostoDomicilio();
+        return calcularSubtotalProductos() + calcularCostoDomicilio();
     }
 }
