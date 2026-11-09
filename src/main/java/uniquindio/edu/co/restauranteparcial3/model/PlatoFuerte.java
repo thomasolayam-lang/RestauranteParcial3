@@ -1,6 +1,6 @@
 package uniquindio.edu.co.restauranteparcial3.model;
 
-public class PlatoFuerte extends Producto{
+public class PlatoFuerte extends Producto {
 
     private double pesoGramos;
     private TipoPreparacion tipoPreparacion;
@@ -37,6 +37,7 @@ public class PlatoFuerte extends Producto{
     public void setCoccionAprobada(boolean coccionAprobada) {
         this.coccionAprobada = coccionAprobada;
     }
+
     // MÉTODOS
     @Override
     public CategoriaProducto getCategoria() {

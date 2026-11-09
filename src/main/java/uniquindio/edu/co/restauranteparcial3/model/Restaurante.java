@@ -22,7 +22,6 @@ public class Restaurante {
         this.serviciosDomicilio = new ArrayList<>();
     }
 
-    // Getters y Setters
     public String getNombreComercial() { return nombreComercial; }
     public void setNombreComercial(String nombreComercial) { this.nombreComercial = nombreComercial; }
 
@@ -131,11 +130,7 @@ public class Restaurante {
     public boolean marcarPedidoEntregado(String codigoPedido) {
         for (Pedido p : historialPedidos) {
             if (p.getCodigo().equalsIgnoreCase(codigoPedido)) {
-                if (p.getEstado() == EstadoPedido.CONFIRMADO) {
-                    p.setEstado(EstadoPedido.ENTREGADO);
-                    return true;
-                }
-                return false;
+                return p.marcarEntregado();
             }
         }
         return false;
@@ -144,17 +139,13 @@ public class Restaurante {
     public boolean cancelarPedido(String codigoPedido) {
         for (Pedido p : historialPedidos) {
             if (p.getCodigo().equalsIgnoreCase(codigoPedido)) {
-                if (p.getEstado() != EstadoPedido.ENTREGADO) {
-                    p.setEstado(EstadoPedido.CANCELADO);
-                    return true;
-                }
-                return false;
+                return p.cancelar();
             }
         }
         return false;
     }
 
-    // 4. Métodos de Reportes y Estadística (Sin Map/HashMap)
+    // 4. Métodos de Reportes y Estadística (Sin uso de Map/HashMap)
     public double calcularIngresosRestaurante() {
         double ingresos = 0.0;
         for (Pedido p : historialPedidos) {
