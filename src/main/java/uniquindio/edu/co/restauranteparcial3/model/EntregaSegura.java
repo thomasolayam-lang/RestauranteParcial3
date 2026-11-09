@@ -1,3 +1,5 @@
+package uniquindio.edu.co.restauranteparcial3.model;
+
 public class EntregaSegura implements ServicioDomicilio {
     public static final double TARIFA_BASE = 7000.0;
     public static final double TARIFA_KM = 1000.0;
