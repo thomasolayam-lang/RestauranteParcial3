@@ -222,4 +222,15 @@ public class Restaurante {
         }
         return mayorCategoria;
     }
+    public boolean actualizarProductoBase(String codigo, String nuevoNombre, String nuevaDescripcion, double nuevoPrecioBase, int nuevoTiempoPrep) {
+        Producto producto = buscarProducto(codigo);
+        if (producto == null) {
+            return false;
+        }
+        producto.setNombre(nuevoNombre);
+        producto.setDescripcion(nuevaDescripcion);
+        producto.setPrecioBase(nuevoPrecioBase);
+        producto.setTiempoPreparacion(nuevoTiempoPrep);
+        return true;
+    }
 }

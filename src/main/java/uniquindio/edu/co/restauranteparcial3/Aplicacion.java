@@ -57,6 +57,7 @@ public class Aplicacion {
         System.out.println("1. Registrar nuevo producto");
         System.out.println("2. Ver catálogo completo");
         System.out.println("3. Ver productos que NO cumplen calidad");
+        System.out.println("4. Modificar producto existente"); // Nueva opción
         System.out.println("0. Volver");
 
         int opcion = leerEntero("Seleccione: ");
@@ -64,6 +65,7 @@ public class Aplicacion {
             case 1 -> registrarProductoConsole();
             case 2 -> listarProductos();
             case 3 -> listarProductosNoAptos();
+            case 4 -> modificarProductoConsole(); // Llamada al submenú
             case 0 -> {}
             default -> System.out.println("Opción inválida.");
         }
@@ -216,6 +218,65 @@ public class Aplicacion {
             System.out.println(p.mostrarInformacion());
         }
     }
+    private static void modificarProductoConsole() {
+        String codigo = leerTexto("Ingrese el código del producto a modificar: ");
+        Producto prod = restaurante.buscarProducto(codigo);
+
+        if (prod == null) {
+            System.out.println(">> Error: No se encontró ningún producto con el código '" + codigo + "'.");
+            return;
+        }
+
+        System.out.println("\nProducto encontrado: " + prod.mostrarInformacion());
+        System.out.println("Ingrese los nuevos datos (presione enter/ingrese datos para actualizar):");
+
+        String nuevoNombre = leerTexto("Nuevo nombre: ");
+        String nuevaDesc = leerTexto("Nueva descripción: ");
+        double nuevoPrecio = leerDecimal("Nuevo precio base ($): ");
+        int nuevoTiempo = leerEntero("Nuevo tiempo de preparación (min): ");
+
+        // Actualización de atributos generales
+        boolean exito = restaurante.actualizarProductoBase(codigo, nuevoNombre, nuevaDesc, nuevoPrecio, nuevoTiempo);
+
+        // Actualización de atributos específicos según el tipo de producto
+        if (prod instanceof PlatoFuerte pf) {
+            double nuevoPeso = leerDecimal("Nuevo peso (gramos): ");
+            System.out.println("Tipo Preparación: 1. ASADO | 2. FRITO | 3. HORNEADO | 4. A_LA_PLANCHA");
+            int prepIdx = leerEntero("Seleccione: ");
+            TipoPreparacion nuevaPrep = TipoPreparacion.values()[Math.max(0, Math.min(prepIdx - 1, 3))];
+            boolean nuevaCoccion = leerBooleano("¿Cocción aprobada? (s/n): ");
+
+            pf.setPesoGramos(nuevoPeso);
+            pf.setTipoPreparacion(nuevaPrep);
+            pf.setCoccionAprobada(nuevaCoccion);
+
+        } else if (prod instanceof Bebida b) {
+            double nuevoVolumen = leerDecimal("Nuevo volumen (ml): ");
+            double nuevaTemp = leerDecimal("Nueva temperatura de servicio (°C): ");
+            System.out.println("Tipo Bebida: 1. FRIA | 2. CALIENTE");
+            int tBebida = leerEntero("Seleccione: ");
+            TipoBebida nuevoTipoB = (tBebida == 2) ? TipoBebida.CALIENTE : TipoBebida.FRIA;
+            boolean nuevaPrepEspecial = leerBooleano("¿Requiere preparación especial? (s/n): ");
+
+            b.setVolumenMl(nuevoVolumen);
+            b.setTemperaturaServicio(nuevaTemp);
+            b.setTipoBebida(nuevoTipoB);
+            b.setRequierePreparacionEspecial(nuevaPrepEspecial);
+
+        } else if (prod instanceof Postre p) {
+            double nuevoPeso = leerDecimal("Nuevo peso (gramos): ");
+            double nuevaTemp = leerDecimal("Nueva temperatura almacenamiento (°C): ");
+            boolean nuevoReqRef = leerBooleano("¿Requiere refrigeración? (s/n): ");
+
+            p.setPesoGramos(nuevoPeso);
+            p.setTemperaturaAlmacenamiento(nuevaTemp);
+            p.setRequiereRefrigeracion(nuevoReqRef);
+        }
+
+        if (exito) {
+            System.out.println(">> Producto '" + codigo + "' actualizado correctamente.");
+        }
+    }
 
     private static void registrarClienteConsole() {
         String doc = leerTexto("Documento de identidad: ");
@@ -285,7 +346,7 @@ public class Aplicacion {
             boolean aceptado = pedido.solicitarDomicilio(servicio, dist);
 
             if (aceptado) {
-                System.out.println(">> Domicilio aceptado por " + servicio.getNombreEmpresa() + ". Costo flete: $" + pedido.calcularCostoDomicilio());
+                System.out.println(">> Domicilio aceptado por " + servicio.getNombreEmpresa() + ". Costo envio: $" + pedido.calcularCostoDomicilio());
             } else {
                 System.out.println(">> ADVERTENCIA: La empresa rechazó el servicio por exceso de distancia o parámetro inválido.");
             }
@@ -426,7 +487,7 @@ public class Aplicacion {
         // Productos
         PlatoFuerte pf1 = new PlatoFuerte("PF01", "Bandeja Paisa", "Plato tradicional", 25000, 25, 600, TipoPreparacion.ASADO, true);
         PlatoFuerte pf2 = new PlatoFuerte("PF02", "Pescado Frito", "Mojarra con patacón", 22000, 20, 500, TipoPreparacion.FRITO, false); // No cumple calidad
-        Bebida b1 = new Bebida("B01", "Jugo de Lulo", "Jugo natural", 6000, 5, 4.0,15.7,TipoBebida.FRIA,false);
+        Bebida b1 = new Bebida("B01", "Jugo de Lulo", "Jugo natural", 6000, 5, 4.0,5.7,TipoBebida.FRIA,false);
         Postre p1 = new Postre("P01", "Flan de Leche", "Postre casero", 8000, 0, 150, 3.0, true);
 
         restaurante.registrarProducto(pf1);
