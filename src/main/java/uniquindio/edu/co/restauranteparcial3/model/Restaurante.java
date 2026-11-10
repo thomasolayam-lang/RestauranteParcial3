@@ -227,6 +227,12 @@ public class Restaurante {
         if (producto == null) {
             return false;
         }
+        if (nuevoNombre == null || nuevoNombre.isBlank() ||
+                nuevaDescripcion == null || nuevaDescripcion.isBlank() ||
+                nuevoPrecioBase <= 0 || nuevoTiempoPrep <= 0) {
+            return false;
+        }
+
         producto.setNombre(nuevoNombre);
         producto.setDescripcion(nuevaDescripcion);
         producto.setPrecioBase(nuevoPrecioBase);

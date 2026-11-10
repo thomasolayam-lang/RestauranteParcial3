@@ -201,10 +201,12 @@ public class Aplicacion {
             System.out.println("El menú se encuentra vacío.");
             return;
         }
-        System.out.println("\n--- CATÁLOGO DE PRODUCTOS ---");
+
+        imprimirEncabezadoCatalogo();
         for (Producto p : menu) {
-            System.out.println(p.mostrarInformacion() + " | Apto Calidad: " + (p.cumpleCalidad() ? "SÍ" : "NO"));
+            imprimirFilaProducto(p);
         }
+        System.out.println("------------------------------------------------------------------------------------------------------------------------");
     }
 
     private static void listarProductosNoAptos() {
@@ -213,11 +215,37 @@ public class Aplicacion {
             System.out.println("Todos los productos en el catálogo cumplen los estándares de calidad.");
             return;
         }
-        System.out.println("\n--- PRODUCTOS QUE NO CUMPLEN CALIDAD ---");
+
+        System.out.println("\n=== PRODUCTOS QUE NO CUMPLEN CALIDAD ===");
+        imprimirEncabezadoCatalogo();
         for (Producto p : noAptos) {
-            System.out.println(p.mostrarInformacion());
+            imprimirFilaProducto(p);
         }
+        System.out.println("------------------------------------------------------------------------------------------------------------------------");
     }
+    private static void imprimirEncabezadoCatalogo() {
+        System.out.println("\n------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("| %-7s | %-18s | %-12s | %-32s | %-11s | %-11s | %-6s |%n",
+                "CÓDIGO", "NOMBRE", "CATEGORÍA", "DESCRIPCIÓN", "P. BASE", "P. VENTA", "APTO");
+        System.out.println("------------------------------------------------------------------------------------------------------------------------");
+    }
+
+    private static void imprimirFilaProducto(Producto p) {
+        String desc = p.getDescripcion();
+        if (desc.length() > 30) {
+            desc = desc.substring(0, 27) + "...";
+        }
+        System.out.printf("| %-7s | %-18s | %-12s | %-32s | $%-10.2f | $%-10.2f | %-6s |%n",
+                p.getCodigo(),
+                p.getNombre(),
+                p.getCategoria(),
+                desc,
+                p.getPrecioBase(),
+                p.calcularPrecioVenta(),
+                p.cumpleCalidad() ? "SÍ" : "NO");
+    }
+
+
     private static void modificarProductoConsole() {
         String codigo = leerTexto("Ingrese el código del producto a modificar: ");
         Producto prod = restaurante.buscarProducto(codigo);
@@ -227,8 +255,12 @@ public class Aplicacion {
             return;
         }
 
-        System.out.println("\nProducto encontrado: " + prod.mostrarInformacion());
-        System.out.println("Ingrese los nuevos datos (presione enter/ingrese datos para actualizar):");
+        System.out.println("\n--- DATOS ACTUALES DEL PRODUCTO ---");
+        imprimirEncabezadoCatalogo();
+        imprimirFilaProducto(prod);
+        System.out.println("------------------------------------------------------------------------------------------------------------------------");
+
+        System.out.println("\nIngrese los nuevos datos (todos los campos son obligatorios y no se permiten vacíos):");
 
         String nuevoNombre = leerTexto("Nuevo nombre: ");
         String nuevaDesc = leerTexto("Nueva descripción: ");
@@ -236,9 +268,9 @@ public class Aplicacion {
         int nuevoTiempo = leerEntero("Nuevo tiempo de preparación (min): ");
 
         // Actualización de atributos generales
-        boolean exito = restaurante.actualizarProductoBase(codigo, nuevoNombre, nuevaDesc, nuevoPrecio, nuevoTiempo);
+        boolean exitoBase = restaurante.actualizarProductoBase(codigo, nuevoNombre, nuevaDesc, nuevoPrecio, nuevoTiempo);
 
-        // Actualización de atributos específicos según el tipo de producto
+        // Actualización de atributos específicos según la subclase
         if (prod instanceof PlatoFuerte pf) {
             double nuevoPeso = leerDecimal("Nuevo peso (gramos): ");
             System.out.println("Tipo Preparación: 1. ASADO | 2. FRITO | 3. HORNEADO | 4. A_LA_PLANCHA");
@@ -252,7 +284,8 @@ public class Aplicacion {
 
         } else if (prod instanceof Bebida b) {
             double nuevoVolumen = leerDecimal("Nuevo volumen (ml): ");
-            double nuevaTemp = leerDecimal("Nueva temperatura de servicio (°C): ");
+            System.out.print("Nueva temperatura de servicio (°C): ");
+            double nuevaTemp = Double.parseDouble(scanner.nextLine().trim());
             System.out.println("Tipo Bebida: 1. FRIA | 2. CALIENTE");
             int tBebida = leerEntero("Seleccione: ");
             TipoBebida nuevoTipoB = (tBebida == 2) ? TipoBebida.CALIENTE : TipoBebida.FRIA;
@@ -265,7 +298,8 @@ public class Aplicacion {
 
         } else if (prod instanceof Postre p) {
             double nuevoPeso = leerDecimal("Nuevo peso (gramos): ");
-            double nuevaTemp = leerDecimal("Nueva temperatura almacenamiento (°C): ");
+            System.out.print("Nueva temperatura almacenamiento (°C): ");
+            double nuevaTemp = Double.parseDouble(scanner.nextLine().trim());
             boolean nuevoReqRef = leerBooleano("¿Requiere refrigeración? (s/n): ");
 
             p.setPesoGramos(nuevoPeso);
@@ -273,8 +307,8 @@ public class Aplicacion {
             p.setRequiereRefrigeracion(nuevoReqRef);
         }
 
-        if (exito) {
-            System.out.println(">> Producto '" + codigo + "' actualizado correctamente.");
+        if (exitoBase) {
+            System.out.println(">> ¡Éxito! El producto '" + codigo + "' fue actualizado perfectamente.");
         }
     }
 
@@ -447,14 +481,28 @@ public class Aplicacion {
 
   //lectores
 
+    private static String leerTexto(String mensaje) {
+        while (true) {
+            System.out.print(mensaje);
+            String entrada = scanner.nextLine().trim();
+            if (!entrada.isEmpty()) {
+                return entrada;
+            }
+            System.out.println(">> Error: El campo no puede estar vacío ni contener solo espacios.");
+        }
+    }
+
     private static int leerEntero(String mensaje) {
         while (true) {
             try {
                 System.out.print(mensaje);
                 int valor = Integer.parseInt(scanner.nextLine().trim());
-                return valor;
+                if (valor > 0) {
+                    return valor;
+                }
+                System.out.println(">> Error: El número debe ser mayor a cero.");
             } catch (NumberFormatException e) {
-                System.out.println("Error: Ingrese un número entero válido.");
+                System.out.println(">> Error: Ingrese un número entero válido.");
             }
         }
     }
@@ -464,16 +512,14 @@ public class Aplicacion {
             try {
                 System.out.print(mensaje);
                 double valor = Double.parseDouble(scanner.nextLine().trim());
-                return valor;
+                if (valor > 0) {
+                    return valor;
+                }
+                System.out.println(">> Error: El valor decimal debe ser mayor a cero.");
             } catch (NumberFormatException e) {
-                System.out.println("Error: Ingrese un número decimal válido (ejemplo: 4.5).");
+                System.out.println(">> Error: Ingrese un número decimal válido (ejemplo: 4.5).");
             }
         }
-    }
-
-    private static String leerTexto(String mensaje) {
-        System.out.print(mensaje);
-        return scanner.nextLine().trim();
     }
 
     private static boolean leerBooleano(String mensaje) {
