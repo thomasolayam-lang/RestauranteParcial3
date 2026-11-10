@@ -102,6 +102,14 @@ public class Restaurante {
         }
         return true;
     }
+    public Pedido buscarPedido(String codigo) {
+        for (Pedido p : historialPedidos) {
+            if (p.getCodigo().equalsIgnoreCase(codigo)) {
+                return p;
+            }
+        }
+        return null;
+    }
 
     public boolean confirmarPedido(Pedido pedido) {
         if (pedido == null) {
@@ -118,6 +126,7 @@ public class Restaurante {
         }
         return null;
     }
+
 
     public List<Pedido> consultarPedidosPorCliente(String documento) {
         Cliente cliente = buscarCliente(documento);

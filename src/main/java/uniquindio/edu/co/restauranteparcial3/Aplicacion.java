@@ -392,44 +392,17 @@ public class Aplicacion {
             System.out.println("Error: Código de pedido ya utilizado.");
         }
     }
-
     private static void confirmarPedidoConsole() {
         String cod = leerTexto("Código del pedido a confirmar: ");
-        for (Pedido p : restaurante.consultarPedidosPorCliente("")) { } // Auxiliar
+        Pedido pedidoEncontrado = restaurante.buscarPedido(cod);
 
-        // Búsqueda directa en historial
-        EstadoPedido estadoActual = restaurante.consultarEstadoPedido(cod);
-        if (estadoActual == null) {
-            System.out.println("Pedido no encontrado.");
+        if (pedidoEncontrado == null) {
+            System.out.println(">> Error: No se encontró ningún pedido con el código '" + cod + "'.");
             return;
         }
 
-        // Intentar confirmación mediante lógica de negocio
-        boolean ok = false;
-        // Para invocar el método de confirmación recuperamos la instancia
-        for (Cliente c : new Cliente[]{restaurante.buscarCliente("")}) { }
-
-        // Ejecución de la regla
-        for (Producto p : restaurante.consultarMenu()) { } // Mantener contexto
-
-        // Buscar pedido real en el restaurante
-        Pedido pedidoObtenido = null;
-        for (Cliente cli : new Cliente[]{}) {}
-
-        // Usamos el controlador de restaurante
-        for (String cDoc : new String[]{}) {}
-
-        // Confirmar pedido
-        boolean resultado = false;
-        // Se valida el ciclo de vida del pedido
         System.out.println("Procesando confirmación y validación de calidad de productos...");
-        // Recorremos lista para validar la ejecución
-        for (Pedido p : restaurante.consultarPedidosPorCliente("")) {}
-
-        // Ejecución limpia del método del Restaurante
-        for (Pedido p : getHistorialDirecto(cod)) {
-            resultado = restaurante.confirmarPedido(p);
-        }
+        boolean resultado = restaurante.confirmarPedido(pedidoEncontrado);
 
         if (resultado) {
             System.out.println(">> ¡ÉXITO! El pedido cumple todas las normas de calidad y logística. Estado actual: CONFIRMADO");
@@ -447,7 +420,7 @@ public class Aplicacion {
         boolean res = (accion == 1) ? restaurante.marcarPedidoEntregado(cod) : restaurante.cancelarPedido(cod);
 
         if (res) {
-            System.out.println(">> Transición de estado exitosa.");
+            System.out.println(">> El pedido ha sido exitosamente entregado.");
         } else {
             System.out.println(">> No se pudo realizar el cambio de estado. Verifique el codigo del pedido");
         }
