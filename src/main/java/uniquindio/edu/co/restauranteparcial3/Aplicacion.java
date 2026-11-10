@@ -239,7 +239,7 @@ public class Aplicacion {
         String doc = leerTexto("Documento a buscar: ");
         Cliente cliente = restaurante.buscarCliente(doc);
         if (cliente != null) {
-            System.out.println("Cliente encontrado: " + cliente.getNombre() + " | Tel: " + cliente.getTelefono() + " | Dir: " + cliente.getDireccion());
+            System.out.println("Cliente encontrado: " + cliente.getNombreCompleto() + " | Tel: " + cliente.getTelefono() + " | Dir: " + cliente.getDireccion());
         } else {
             System.out.println("Cliente no registrado.");
         }
@@ -357,7 +357,7 @@ public class Aplicacion {
         if (res) {
             System.out.println(">> Transición de estado exitosa.");
         } else {
-            System.out.println(">> No se pudo realizar el cambio de estado. Verifique las reglas del ciclo de vida.");
+            System.out.println(">> No se pudo realizar el cambio de estado. Verifique el codigo del pedido");
         }
     }
 
@@ -431,7 +431,7 @@ public class Aplicacion {
         // Productos
         PlatoFuerte pf1 = new PlatoFuerte("PF01", "Bandeja Paisa", "Plato tradicional", 25000, 25, 600, TipoPreparacion.ASADO, true);
         PlatoFuerte pf2 = new PlatoFuerte("PF02", "Pescado Frito", "Mojarra con patacón", 22000, 20, 500, TipoPreparacion.FRITO, false); // No cumple calidad
-        Bebida b1 = new Bebida("B01", "Jugo de Lulo", "Jugo natural", 6000, 5, 4.0, TipoBebida.FRIA);
+        Bebida b1 = new Bebida("B01", "Jugo de Lulo", "Jugo natural", 6000, 5, 4.0,15.7,TipoBebida.FRIA,false);
         Postre p1 = new Postre("P01", "Flan de Leche", "Postre casero", 8000, 0, 150, 3.0, true);
 
         restaurante.registrarProducto(pf1);
@@ -444,7 +444,7 @@ public class Aplicacion {
         restaurante.registrarServicioDomicilio(new EntregaSegura());
 
         // Cliente
-        Cliente c1 = new Cliente("1094123456", "Carlos Gómez", "3101234567", "Carrera 15 # 10-02");
+        Cliente c1 = new Cliente("1094", "Carlos Gómez", "3101234567", "Carlos@gmail.com","Carrera 15 # 10-02");
         restaurante.registrarCliente(c1);
     }
 }
