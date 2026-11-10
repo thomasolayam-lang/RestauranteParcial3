@@ -496,11 +496,7 @@ public class Aplicacion {
         while (true) {
             try {
                 System.out.print(mensaje);
-                int valor = Integer.parseInt(scanner.nextLine().trim());
-                if (valor > 0) {
-                    return valor;
-                }
-                System.out.println(">> Error: El número debe ser mayor a cero.");
+                return Integer.parseInt(scanner.nextLine().trim());
             } catch (NumberFormatException e) {
                 System.out.println(">> Error: Ingrese un número entero válido.");
             }
