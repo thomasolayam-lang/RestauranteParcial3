@@ -39,13 +39,10 @@ public class Aplicacion {
         scanner.close();
     }
 
-    // ==========================================
-    // MENÚS PRINCIPALES Y SUBMENÚS
-    // ==========================================
 
     private static void mostrarMenuPrincipal() {
         System.out.println("==================================================");
-        System.out.println("   SISTEMA DE GESTIÓN - SABOR & TRADICIÓN");
+        System.out.println("                SABOR & TRADICIÓN");
         System.out.println("==================================================");
         System.out.println("1. Gestión de Productos (Menú)");
         System.out.println("2. Gestión de Clientes");
@@ -141,9 +138,9 @@ public class Aplicacion {
         }
     }
 
-    // ==========================================
-    // OPERACIONES DE CONSOLA
-    // ==========================================
+
+    // OPERACIONES DE LA CONSOLA
+
 
     private static void registrarProductoConsole() {
         System.out.println("\nTipo de producto a crear:");
@@ -387,9 +384,7 @@ public class Aplicacion {
         return temporal;
     }
 
-    // ==========================================
-    // MÉTODOS DE UTILIDAD PARA LECTURA SEGURA
-    // ==========================================
+  //lectores
 
     private static int leerEntero(String mensaje) {
         while (true) {
